@@ -34,7 +34,8 @@
     "class-methods-use-this": "off",
     "camelcase": "off",
     "no-param-reassign": "off",
-    "no-return-assign": "off"
+    "no-return-assign": "off",
+    "@typescript-eslint/camelcase": "off"
   },
   "settings": {
     "import/resolver": {
