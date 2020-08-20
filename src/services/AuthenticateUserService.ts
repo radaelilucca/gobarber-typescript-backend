@@ -3,6 +3,7 @@ import bcryptjs from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 
 import User from '../models/User';
+import authConfig from '../config/auth';
 
 interface Request {
   email: string;
@@ -20,15 +21,12 @@ class AuthenticateUserService {
     const user = await usersRepository.findOne({ where: { email } });
 
     if (!user) {
-      console.log('user');
-
       throw new Error('Invalid email/password combination');
     }
 
     const validPassword = await bcryptjs.compare(password, user.password);
 
     if (!validPassword) {
-      console.log('pass');
       throw new Error('Invalid email/password combination');
     }
 
@@ -36,9 +34,11 @@ class AuthenticateUserService {
 
     // authenticated
 
-    const token = sign({}, '1ce5afbf35bdc653829d85f8b3fc92ba', {
+    const { secret, expiresIn } = authConfig.jwt;
+
+    const token = sign({}, secret, {
       subject: user.id,
-      expiresIn: '1d',
+      expiresIn,
     });
 
     return {
